@@ -177,7 +177,9 @@ trap_dispatch(struct trapframe *tf) {
         if (tf->tf_cs != USER_CS) {
             switchk2u = *tf;
             switchk2u.tf_cs = USER_CS;
+
             switchk2u.tf_ds = switchk2u.tf_es = switchk2u.tf_ss = USER_DS;
+
             switchk2u.tf_esp = (uint32_t)tf + sizeof(struct trapframe) - 8;
 		
             // set eflags, make sure ucore can use io under user mode.
@@ -205,10 +207,8 @@ trap_dispatch(struct trapframe *tf) {
         break;
     default:
         // in kernel, it must be a mistake
-        if ((tf->tf_cs & 3) == 0) {
-            print_trapframe(tf);
-            panic("unexpected trap in kernel.\n");
-        }
+        print_trapframe(tf);
+        panic("unexpected trap in kernel.\n");
     }
 }
 

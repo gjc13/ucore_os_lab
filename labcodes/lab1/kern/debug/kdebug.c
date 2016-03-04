@@ -254,6 +254,18 @@ read_eip(void) {
     return eip;
 }
 
+/*
+   print argument of a function call 
+*/
+static __noinline void
+print_args(uint32_t * ebp) {
+    int i;
+    for(i = 0; i < 4; i++)
+    {
+        cprintf("%08x ", ebp[i+2]);
+    }
+}
+
 /* *
  * print_stackframe - print a list of the saved eip values from the nested 'call'
  * instructions that led to the current point of execution
@@ -290,7 +302,7 @@ read_eip(void) {
  * */
 void
 print_stackframe(void) {
-     /* LAB1 YOUR CODE : STEP 1 */
+     /* LAB1 2013011509: STEP 1 */
      /* (1) call read_ebp() to get the value of ebp. the type is (uint32_t);
       * (2) call read_eip() to get the value of eip. the type is (uint32_t);
       * (3) from 0 .. STACKFRAME_DEPTH
@@ -302,5 +314,16 @@ print_stackframe(void) {
       *           NOTICE: the calling funciton's return addr eip  = ss:[ebp+4]
       *                   the calling funciton's ebp = ss:[ebp]
       */
+    uint32_t now_ebp = read_ebp();
+    uint32_t now_eip = read_eip();
+    while(now_ebp) {
+        cprintf("ebp:%08x, eip:%08x, args:", now_ebp, now_eip);
+        print_args((uint32_t *)now_ebp);
+        cprintf("\n");
+        print_debuginfo(now_eip-1);
+        cprintf("\n");
+        now_eip = *((uint32_t *)(now_ebp + 4));
+        now_ebp = *((uint32_t *)now_ebp);
+    }
 }
 

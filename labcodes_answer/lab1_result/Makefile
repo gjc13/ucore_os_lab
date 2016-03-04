@@ -5,6 +5,8 @@ SLASH	:= /
 
 V       := @
 
+GCCPREFIX := i386-elf-
+
 # try to infer the correct GCCPREFX
 ifndef GCCPREFIX
 GCCPREFIX := $(shell if i386-elf-objdump -i 2>&1 | grep '^elf32-i386$$' >/dev/null 2>&1; \

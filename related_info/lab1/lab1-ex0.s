@@ -3,8 +3,8 @@
 hello:
 	.string "hello world\n"
 
-.globl	main
-main:
+.globl	_main
+_main:
 	movl	$SYS_write,%eax
 	movl	$STDOUT,%ebx
 	movl	$hello,%ecx

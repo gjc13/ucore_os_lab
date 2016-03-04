@@ -9,6 +9,8 @@
 #include <intr.h>
 #include <pmm.h>
 #include <kmonitor.h>
+#include <trap.h>
+
 int kern_init(void) __attribute__((noreturn));
 void grade_backtrace(void);
 static void lab1_switch_test(void);
@@ -37,7 +39,7 @@ kern_init(void) {
 
     //LAB1: CAHLLENGE 1 If you try to do it, uncomment lab1_switch_test()
     // user/kernel mode switch test
-    //lab1_switch_test();
+    lab1_switch_test();
 
     /* do nothing */
     while (1);
@@ -83,20 +85,45 @@ lab1_print_cur_status(void) {
 
 static void
 lab1_switch_to_user(void) {
-    //LAB1 CHALLENGE 1 : TODO
+    //LAB1 CHALLENGE 1 : 2013011509
+    //subl $8, %esp is a very tricky way "pad" the struct
+    //In this way, although we trap from kernel to kernel,
+    //tf->tf_esp and tf->tf_ss point to the memory we padded here.
+    //So we can access and modify these fields without corrupting the kernel
+    asm volatile (
+        "subl $8, %%esp\n"
+        "int %0\n"
+        "movl %%ebp, %%esp"
+        :
+        :"i" (T_SWITCH_TOU)
+    );
 }
 
 static void
 lab1_switch_to_kernel(void) {
-    //LAB1 CHALLENGE 1 :  TODO
+    //LAB1 CHALLENGE 1 : 201301509
+    //movl %ebp, %esp forces to clear the stack
+    asm volatile (
+        "int %0\n"
+        "movl %%ebp, %%esp"
+        :
+        :"i" (T_SWITCH_TOK)
+    );
+
 }
 
 static void
 lab1_switch_test(void) {
     lab1_print_cur_status();
+#ifndef DEBUG_GRADE
+    while(cons_getc() != '3');
+#endif
     cprintf("+++ switch to  user  mode +++\n");
     lab1_switch_to_user();
     lab1_print_cur_status();
+#ifndef DEBUG_GRADE
+    while(cons_getc() != '0');
+#endif
     cprintf("+++ switch to kernel mode +++\n");
     lab1_switch_to_kernel();
     lab1_print_cur_status();

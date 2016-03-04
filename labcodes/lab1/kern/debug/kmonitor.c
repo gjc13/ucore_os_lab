@@ -120,7 +120,7 @@ mon_kerninfo(int argc, char **argv, struct trapframe *tf) {
  * mon_backtrace - call print_stackframe in kern/debug/kdebug.c to
  * print a backtrace of the stack.
  * */
-int
+__noinline int 
 mon_backtrace(int argc, char **argv, struct trapframe *tf) {
     print_stackframe();
     return 0;
