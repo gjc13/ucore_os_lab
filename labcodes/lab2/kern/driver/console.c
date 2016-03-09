@@ -399,7 +399,7 @@ kbd_proc_data(void) {
 }
 
 /* kbd_intr - try to feed input characters from keyboard */
-static void
+void
 kbd_intr(void) {
     cons_intr(kbd_proc_data);
 }

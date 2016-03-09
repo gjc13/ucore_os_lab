@@ -22,3 +22,4 @@ disk0
 *.orig
 *.dSYM
 .gdbinit
+.DS_Store

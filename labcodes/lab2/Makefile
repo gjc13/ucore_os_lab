@@ -7,6 +7,8 @@ V       := @
 #need llvm/cang-3.5+
 #USELLVM := 1
 # try to infer the correct GCCPREFX
+#
+GCCPREFIX := i386-elf-
 ifndef GCCPREFIX
 GCCPREFIX := $(shell if i386-ucore-elf-objdump -i 2>&1 | grep '^elf32-i386$$' >/dev/null 2>&1; \
 	then echo 'i386-ucore-elf-'; \
