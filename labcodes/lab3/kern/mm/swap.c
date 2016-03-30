@@ -6,6 +6,7 @@
 #include <memlayout.h>
 #include <pmm.h>
 #include <mmu.h>
+#include <swap_improved_clk.h>
 
 // the valid vaddr for check is between 0~CHECK_VALID_VADDR-1
 #define CHECK_VALID_VIR_PAGE_NUM 5
@@ -38,7 +39,11 @@ swap_init(void)
      }
      
 
+#ifdef USE_CLK_SWAP
+     sm = &swap_manager_improved_clk;
+#else
      sm = &swap_manager_fifo;
+#endif
      int r = sm->init();
      
      if (r == 0)
@@ -89,7 +94,7 @@ swap_out(struct mm_struct *mm, int n, int in_tick)
           // cprintf("i %d, SWAP: call swap_out_victim\n",i);
           int r = sm->swap_out_victim(mm, &page, in_tick);
           if (r != 0) {
-                    cprintf("i %d, swap_out: call swap_out_victim failed\n",i);
+                  cprintf("i %d, swap_out: call swap_out_victim failed\n",i);
                   break;
           }          
           //assert(!PageReserved(page));
@@ -100,17 +105,27 @@ swap_out(struct mm_struct *mm, int n, int in_tick)
           pte_t *ptep = get_pte(mm->pgdir, v, 0);
           assert((*ptep & PTE_P) != 0);
 
-          if (swapfs_write( (page->pra_vaddr/PGSIZE+1)<<8, page) != 0) {
-                    cprintf("SWAP: failed to save\n");
-                    sm->map_swappable(mm, v, page, 0);
-                    continue;
+          //Lab3_X: 2013011509
+          //Only write back if dirty
+          if (page->need_write_back) {
+              if (swapfs_write((page->pra_vaddr / PGSIZE + 1) << 8, page) !=
+                  0) {
+                  cprintf("SWAP: failed to save\n");
+                  sm->map_swappable(mm, v, page, 0);
+                  continue;
+              } else {
+                  cprintf(
+                      "swap_out: i %d, store page in vaddr 0x%x to disk swap "
+                      "entry %d\n",
+                      i, v, page->pra_vaddr / PGSIZE + 1);
+                  *ptep = (page->pra_vaddr / PGSIZE + 1) << 8;
+                  free_page(page);
+                  page->has_backup = 1;
+              }
+          } else {
+              *ptep = (page->pra_vaddr / PGSIZE + 1) << 8;
+              free_page(page);
           }
-          else {
-                    cprintf("swap_out: i %d, store page in vaddr 0x%x to disk swap entry %d\n", i, v, page->pra_vaddr/PGSIZE+1);
-                    *ptep = (page->pra_vaddr/PGSIZE+1)<<8;
-                    free_page(page);
-          }
-          
           tlb_invalidate(mm->pgdir, v);
      }
      return i;

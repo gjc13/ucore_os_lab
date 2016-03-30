@@ -23,3 +23,5 @@ disk0
 *.dSYM
 .gdbinit
 .DS_Store
+.ycm_extra_conf.py
+*.pyc

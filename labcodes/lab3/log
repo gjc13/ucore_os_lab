@@ -1,0 +1,163 @@
+(THU.CST) os is loading ...
+
+Special kernel symbols:
+  entry  0xc010002c (phys)
+  etext  0xc0108f07 (phys)
+  edata  0xc0121aa8 (phys)
+  end    0xc0122bf8 (phys)
+Kernel executable memory footprint: 139KB
+ebp:c0120f48, eip:c01009da, args:00010074 00122c00 c0120f78 c01000ba 
+    kern/debug/kdebug.c:321: print_stackframe+21
+
+ebp:c0120f58, eip:c0100c96, args:00000000 00000000 00000000 c0120fc8 
+    kern/debug/kmonitor.c:129: mon_backtrace+10
+
+ebp:c0120f78, eip:c01000ba, args:00000000 c0120fa0 ffff0000 c0120fa4 
+    kern/init/init.c:57: grade_backtrace2+19
+
+ebp:c0120f98, eip:c01000db, args:00000000 ffff0000 c0120fc4 0000002a 
+    kern/init/init.c:62: grade_backtrace1+27
+
+ebp:c0120fb8, eip:c01000f7, args:00000000 c010002c ffff0000 c010006f 
+    kern/init/init.c:67: grade_backtrace0+19
+
+ebp:c0120fd8, eip:c0100117, args:00000000 00000000 00000000 c0108f20 
+    kern/init/init.c:72: grade_backtrace+26
+
+ebp:c0120ff8, eip:c010007c, args:00000000 00000000 0000ffff 40cf9a00 
+    kern/init/init.c:32: kern_init+79
+
+memory management: default_pmm_manager
+e820map:
+  memory: 0009fc00, [00000000, 0009fbff], type = 1.
+  memory: 00000400, [0009fc00, 0009ffff], type = 2.
+  memory: 00010000, [000f0000, 000fffff], type = 2.
+  memory: 07ee0000, [00100000, 07fdffff], type = 1.
+  memory: 00020000, [07fe0000, 07ffffff], type = 2.
+  memory: 00040000, [fffc0000, ffffffff], type = 2.
+
+physical paging info:
+    physical page info table starts at 0xc0123000(logical)
+    total 32736 pages, page size 4096 bytes
+    free memory starts at 0xc0242b80
+    free memory begins at page number 579
+check_alloc_page() succeeded!
+intitial pdt at 00243000(physical)
+check_pgdir() succeeded!
+check_boot_pgdir() succeeded!
+-------------------- BEGIN --------------------
+PDE(0e0) c0000000-f8000000 38000000 urw
+  |-- PTE(38000) c0000000-f8000000 38000000 -rw
+PDE(001) fac00000-fb000000 00400000 -rw
+  |-- PTE(000e0) faf00000-fafe0000 000e0000 urw
+  |-- PTE(00001) fafeb000-fafec000 00001000 -rw
+--------------------- END ---------------------
+check_vma_struct() succeeded!
+page fault at 0x00000100: K/W [no page found].
+[pg_fault] page doesn't exsit, allocate new page
+check_pgfault() succeeded!
+check_vmm() succeeded.
+ide 0:      10000(sectors), 'QEMU HARDDISK'.
+ide 1:     262144(sectors), 'QEMU HARDDISK'.
+SWAP: manager = improved clock swap manager
+BEGIN check_swap: count 1, total 31932
+now fifo list:
+
+setup Page Table for vaddr 0X1000, so alloc a page
+setup Page Table vaddr 0~4MB OVER!
+set up init env for check_swap begin!
+page fault at 0x00001000: K/W [no page found].
+[pg_fault] page doesn't exsit, allocate new page
+[pgdir_alloc_page] map swappable address 0x00001000
+now fifo list:
+[pte 00327007] ** 0x00001000( , , )->
+page fault at 0x00002000: K/W [no page found].
+[pg_fault] page doesn't exsit, allocate new page
+[pgdir_alloc_page] map swappable address 0x00002000
+now fifo list:
+[pte 00328007] ** 0x00002000( , , )->[pte 00327067]0x00001000(A,D, )->
+page fault at 0x00003000: K/W [no page found].
+[pg_fault] page doesn't exsit, allocate new page
+[pgdir_alloc_page] map swappable address 0x00003000
+now fifo list:
+[pte 00329007] ** 0x00003000( , , )->[pte 00328067]0x00002000(A,D, )->[pte 00327067]0x00001000(A,D, )->
+page fault at 0x00004000: K/W [no page found].
+[pg_fault] page doesn't exsit, allocate new page
+[pgdir_alloc_page] map swappable address 0x00004000
+now fifo list:
+[pte 0032a007] ** 0x00004000( , , )->[pte 00329067]0x00003000(A,D, )->[pte 00328067]0x00002000(A,D, )->[pte 00327067]0x00001000(A,D, )->
+set up init env for check_swap over!
+write Virt Page 3 in fifo_check_swap
+pgfault_num 4
+now fifo list:
+[pte 0032a067] ** 0x00004000(A,D, )->[pte 00329067]0x00003000(A,D, )->[pte 00328067]0x00002000(A,D, )->[pte 00327067]0x00001000(A,D, )->
+write Virt Page 1 in fifo_check_swap
+pgfault_num 4
+now fifo list:
+[pte 0032a067] ** 0x00004000(A,D, )->[pte 00329067]0x00003000(A,D, )->[pte 00328067]0x00002000(A,D, )->[pte 00327067]0x00001000(A,D, )->
+write Virt Page 4 in fifo_check_swap
+pgfault_num 4
+now fifo list:
+[pte 0032a067] ** 0x00004000(A,D, )->[pte 00329067]0x00003000(A,D, )->[pte 00328067]0x00002000(A,D, )->[pte 00327067]0x00001000(A,D, )->
+write Virt Page 2 in fifo_check_swap
+pgfault_num 4
+now fifo list:
+[pte 0032a067] ** 0x00004000(A,D, )->[pte 00329067]0x00003000(A,D, )->[pte 00328067]0x00002000(A,D, )->[pte 00327067]0x00001000(A,D, )->
+write Virt Page 5 in fifo_check_swap
+page fault at 0x00005000: K/W [no page found].
+[pg_fault] page doesn't exsit, allocate new page
+swap_out: i 0, store page in vaddr 0x4000 to disk swap entry 5
+[pgdir_alloc_page] map swappable address 0x00005000
+now fifo list:
+[pte 0032a007] ** 0x00005000( , , )->[pte 00329007]0x00003000( , ,B)->[pte 00328007]0x00002000( , ,B)->[pte 00327007]0x00001000( , ,B)->
+pgfault_num 5
+now fifo list:
+[pte 0032a067] ** 0x00005000(A,D, )->[pte 00329007]0x00003000( , ,B)->[pte 00328007]0x00002000( , ,B)->[pte 00327007]0x00001000( , ,B)->
+write Virt Page 2 in fifo_check_swap
+before 35
+after 255
+pgfault_num 5
+now fifo list:
+[pte 0032a067] ** 0x00005000(A,D, )->[pte 00329007]0x00003000( , ,B)->[pte 00328067]0x00002000(A,D,B)->[pte 00327007]0x00001000( , ,B)->
+write Virt Page 1 in fifo_check_swap
+pgfault_num 5
+now fifo list:
+[pte 0032a067] ** 0x00005000(A,D, )->[pte 00329007]0x00003000( , ,B)->[pte 00328067]0x00002000(A,D,B)->[pte 00327067]0x00001000(A,D,B)->
+write Virt Page 2 in fifo_check_swap
+pgfault_num 5
+now fifo list:
+[pte 0032a067] ** 0x00005000(A,D, )->[pte 00329007]0x00003000( , ,B)->[pte 00328067]0x00002000(A,D,B)->[pte 00327067]0x00001000(A,D,B)->
+
+-------------------------------
+[_clk_tick_event]swap_out: store page in vaddr 0x3000 to disk swap entry 4
+[_clk_tick_event]swap_out: store page in vaddr 0x2000 to disk swap entry 3
+[_clk_tick_event]swap_out: store page in vaddr 0x1000 to disk swap entry 2
+-------------------------------
+
+write Virt Page 3 in fifo_check_swap
+pgfault_num 5
+now fifo list:
+[pte 0032a067] ** 0x00005000(A,D, )->[pte 00329067]0x00003000(A,D, )->[pte 00328027]0x00002000(A, , )->[pte 00327027]0x00001000(A, , )->
+write Virt Page 4 in fifo_check_swap
+page fault at 0x00004004: K/W [no page found].
+[pg_fault] swap in a page
+swap_in: load disk swap entry 5 with swap_page in vadr 0x4000
+now fifo list:
+[pte 0032a007]0x00005000( , ,B)->[pte 00329007]0x00003000( , ,B)->[pte 00328007] ** 0x00004000( , , )->[pte 00327007]0x00001000( , , )->
+pgfault_num 6
+now fifo list:
+[pte 0032a007]0x00005000( , ,B)->[pte 00329007]0x00003000( , ,B)->[pte 00328067] ** 0x00004000(A,D, )->[pte 00327007]0x00001000( , , )->
+write Virt Page 5 in fifo_check_swap
+pgfault_num 6
+now fifo list:
+[pte 0032a067]0x00005000(A,D,B)->[pte 00329007]0x00003000( , ,B)->[pte 00328067] ** 0x00004000(A,D, )->[pte 00327007]0x00001000( , , )->
+write Virt Page 1 in fifo_check_swap
+pgfault_num 6
+now fifo list:
+[pte 0032a067]0x00005000(A,D,B)->[pte 00329007]0x00003000( , ,B)->[pte 00328067] ** 0x00004000(A,D, )->[pte 00327067]0x00001000(A,D, )->
+count is 0, total is 7
+check_swap() succeeded!
+++ setup timer interrupts
+[_clk_tick_event]swap_out: store page in vaddr 0x5000 to disk swap entry 6
+[_clk_tick_event]swap_out: store page in vaddr 0x3000 to disk swap entry 4
+100 ticks
