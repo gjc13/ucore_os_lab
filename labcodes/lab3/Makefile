@@ -43,6 +43,7 @@ endif
 # delete target files if there is an error (or make is interrupted)
 .DELETE_ON_ERROR:
 
+#DEFS := -DUSE_CLK_SWAP
 # define compiler and flags
 ifndef  USELLVM
 HOSTCC		:= gcc

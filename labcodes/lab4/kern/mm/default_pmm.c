@@ -116,6 +116,7 @@ default_alloc_pages(size_t n) {
             struct Page *p = page + n;
             p->property = page->property - n;
             list_add(prev, &(p->page_link));
+            SetPageProperty(p);
         }
         nr_free -= n;
         ClearPageProperty(page);
@@ -151,6 +152,7 @@ default_free_pages(struct Page *base, size_t n) {
             SetPageProperty(p);
         }
     }
+    SetPageProperty(base);
     le = list_next(&free_list);
     list_entry_t *prev = &free_list;
     uint32_t prev_addr = 0;
