@@ -104,6 +104,8 @@ struct Page {
     list_entry_t page_link;         // free list link
     list_entry_t pra_page_link;     // used for pra (page replace algorithm)
     uintptr_t pra_vaddr;            // used for pra (page replace algorithm)
+    int8_t need_write_back;         // needed to be write back in clock interrupt
+    int8_t has_backup;              // whether has backup in swapfs
 };
 
 /* Flags describing the status of a page frame */

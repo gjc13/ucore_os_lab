@@ -26,6 +26,18 @@
  */
 
 list_entry_t pra_list_head;
+
+static void print_fifo_list() {
+    cprintf("now fifo list:\n");
+    list_entry_t * now = pra_list_head.next;
+    while(now != & pra_list_head) {
+        struct Page * page = le2page(now, pra_page_link);
+        cprintf("0x%08x->", page->pra_vaddr);
+        now = now->next;
+    }
+    cprintf("\n");
+}
+
 /*
  * (2) _fifo_init_mm: init pra_list_head and let  mm->sm_priv point to the addr of pra_list_head.
  *              Now, From the memory control struct mm_struct, we can access FIFO PRA
@@ -36,38 +48,49 @@ _fifo_init_mm(struct mm_struct *mm)
      list_init(&pra_list_head);
      mm->sm_priv = &pra_list_head;
      //cprintf(" mm->sm_priv %x in fifo_init_mm\n",mm->sm_priv);
+     //print_fifo_list();
      return 0;
 }
 /*
  * (3)_fifo_map_swappable: According FIFO PRA, we should link the most recent arrival page at the back of pra_list_head qeueue
  */
-static int
-_fifo_map_swappable(struct mm_struct *mm, uintptr_t addr, struct Page *page, int swap_in)
-{
-    list_entry_t *head=(list_entry_t*) mm->sm_priv;
-    list_entry_t *entry=&(page->pra_page_link);
- 
+static int _fifo_map_swappable(struct mm_struct *mm, uintptr_t addr,
+                               struct Page *page, int swap_in) {
+    list_entry_t *head = (list_entry_t *)mm->sm_priv;
+    list_entry_t *entry = &(page->pra_page_link);
+
     assert(entry != NULL && head != NULL);
-    //record the page access situlation
-    /*LAB3 EXERCISE 2: YOUR CODE*/ 
-    //(1)link the most recent arrival page at the back of the pra_list_head qeueue.
+    // record the page access situlation
+    /*LAB3 EXERCISE 2: 2013011509*/
+    //(1)link the most recent arrival page at the back of the pra_list_head
+    //qeueue.
+    page->pra_vaddr = addr;
+    page->need_write_back = 1;
+    list_add_before(head, entry);
+    //cprintf("[_fifo_map_swappable]map page 0x%08x\n", page->pra_vaddr);
+    //print_fifo_list();
     return 0;
 }
 /*
  *  (4)_fifo_swap_out_victim: According FIFO PRA, we should unlink the  earliest arrival page in front of pra_list_head qeueue,
  *                            then set the addr of addr of this page to ptr_page.
  */
-static int
-_fifo_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tick)
-{
-     list_entry_t *head=(list_entry_t*) mm->sm_priv;
-         assert(head != NULL);
-     assert(in_tick==0);
-     /* Select the victim */
-     /*LAB3 EXERCISE 2: YOUR CODE*/ 
-     //(1)  unlink the  earliest arrival page in front of pra_list_head qeueue
-     //(2)  set the addr of addr of this page to ptr_page
-     return 0;
+static int _fifo_swap_out_victim(struct mm_struct *mm, struct Page **ptr_page,
+                                 int in_tick) {
+    list_entry_t *head = (list_entry_t *)mm->sm_priv;
+    assert(head != NULL);
+    assert(in_tick == 0);
+    /* Select the victim */
+    /*LAB3 EXERCISE 2: YOUR CODE*/
+    //(1)  unlink the  earliest arrival page in front of pra_list_head qeueue
+    //(2)  set the addr of addr of this page to ptr_page
+    list_entry_t *victim_entry = head->next;
+    list_del(victim_entry);
+    struct Page *page = le2page(victim_entry, pra_page_link);
+    (*ptr_page) = page;
+    //cprintf("[_fifo_swap_out_victim]swap out page 0x%08x\n", page->pra_vaddr);
+    //print_fifo_list();
+    return 0;
 }
 
 static int
