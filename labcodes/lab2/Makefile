@@ -7,8 +7,6 @@ V       := @
 #need llvm/cang-3.5+
 #USELLVM := 1
 # try to infer the correct GCCPREFX
-#
-GCCPREFIX := i386-elf-
 ifndef GCCPREFIX
 GCCPREFIX := $(shell if i386-ucore-elf-objdump -i 2>&1 | grep '^elf32-i386$$' >/dev/null 2>&1; \
 	then echo 'i386-ucore-elf-'; \
@@ -252,9 +250,6 @@ debug-nox: $(UCOREIMG)
 	$(V)$(QEMU) -S -s -serial mon:stdio $(QEMUOPTS) -nographic &
 	$(V)sleep 2
 	$(V)$(TERMINAL) -e "$(GDB) -q -x tools/gdbinit"
-
-gdb: $(UCOREIMG)
-	$(V)$(QEMU) -S -s -parallel stdio -hda $< -serial null
 
 .PHONY: grade touch
 

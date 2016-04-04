@@ -81,12 +81,23 @@ void kernel_thread_entry(void);
 void forkrets(struct trapframe *tf);
 void switch_to(struct context *from, struct context *to);
 
+static void init_default_context(struct context * context) {
+    context->ebx = 0;
+    context->ecx = 0;
+    context->edx = 0;
+    context->esi = 0;
+    context->edi = 0;
+    context->esp = 0;
+    context->eip = 0;
+    context->ebp = 0;
+}
+
 // alloc_proc - alloc a proc_struct and init all fields of proc_struct
 static struct proc_struct *
 alloc_proc(void) {
     struct proc_struct *proc = kmalloc(sizeof(struct proc_struct));
     if (proc != NULL) {
-    //LAB4:EXERCISE1 YOUR CODE
+    //LAB4:EXERCISE1 2013011509
     /*
      * below fields in proc_struct need to be initialized
      *       enum proc_state state;                      // Process state
@@ -102,6 +113,16 @@ alloc_proc(void) {
      *       uint32_t flags;                             // Process flag
      *       char name[PROC_NAME_LEN + 1];               // Process name
      */
+        //leave it to fork to set pid
+        proc->pid = -1;
+        proc->runs = 0;
+        proc->kstack = (uintptr_t)NULL;
+        proc->need_resched = 0;
+        proc->parent = NULL;
+        init_default_context(&proc->context);
+        proc->tf = NULL;
+        proc->cr3 = boot_cr3;
+        proc->name[0] = 0;
     }
     return proc;
 }
