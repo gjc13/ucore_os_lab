@@ -22,6 +22,14 @@ GCCPREFIX := $(shell if i386-ucore-elf-objdump -i 2>&1 | grep '^elf32-i386$$' >/
 	echo "***" 1>&2; exit 1; fi)
 endif
 
+# Fix osx and linux different dd
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+BS_SIZE := 1m
+else
+BS_SIZE := 1M
+endif
+
 # try to infer the correct QEMU
 ifndef QEMU
 QEMU := $(shell if which qemu-system-i386 > /dev/null; \
@@ -198,7 +206,7 @@ $(call create_target,ucore.img)
 SWAPIMG		:= $(call totarget,swap.img)
 
 $(SWAPIMG):
-	$(V)dd if=/dev/zero of=$@ bs=1m count=128
+	$(V)dd if=/dev/zero of=$@ bs=$(BS_SIZE) count=128
 
 $(call create_target,swap.img)
 

@@ -37,6 +37,14 @@ QEMU := $(shell if which qemu-system-i386 > /dev/null; \
 	echo "***" 1>&2; exit 1; fi)
 endif
 
+# Fix osx and linux different dd
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+BS_SIZE := 1m
+else
+BS_SIZE := 1M
+endif
+
 # eliminate default suffix rules
 .SUFFIXES: .c .S .h
 
@@ -238,7 +246,7 @@ $(call create_target,ucore.img)
 SWAPIMG		:= $(call totarget,swap.img)
 
 $(SWAPIMG):
-	$(V)dd if=/dev/zero of=$@ bs=1m count=128
+	$(V)dd if=/dev/zero of=$@ bs=$(BS_SIZE) count=128
 
 $(call create_target,swap.img)
 
