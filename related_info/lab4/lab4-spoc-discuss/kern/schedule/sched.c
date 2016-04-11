@@ -3,6 +3,8 @@
 #include <proc.h>
 #include <sched.h>
 #include <assert.h>
+#include <stdio.h>
+
 
 void
 wakeup_proc(struct proc_struct *proc) {
@@ -15,6 +17,7 @@ schedule(void) {
     bool intr_flag;
     list_entry_t *le, *last;
     struct proc_struct *next = NULL;
+    cprintf("[schedule] called from process %s pid %d\n", current->name, current->pid);
     local_intr_save(intr_flag);
     {
         current->need_resched = 0;
@@ -31,6 +34,7 @@ schedule(void) {
         if (next == NULL || next->state != PROC_RUNNABLE) {
             next = idleproc;
         }
+        cprintf("[schedule] next to run process %s pid %d\n", next->name, next->pid);
         next->runs ++;
         if (next != current) {
             proc_run(next);
