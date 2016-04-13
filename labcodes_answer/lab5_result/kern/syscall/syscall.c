@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <pmm.h>
 #include <assert.h>
+#include <kdebug.h>
 
 static int
 sys_exit(uint32_t arg[]) {
@@ -81,6 +82,17 @@ static int (*syscalls[])(uint32_t arg[]) = {
 void
 syscall(void) {
     struct trapframe *tf = current->tf;
+    uintptr_t eip = current->tf->tf_eip;
+    if (eip < 0xc0000000) {
+        cprintf("syscall from user\n");
+        cprintf("eip 0x%08x\n", tf->tf_eip);
+        print_user_stackframe(tf->tf_regs.reg_ebp, eip);
+        print_stackframe();
+        panic("done");
+    }
+    else {
+        cprintf("syscall from kernel\n");
+    }
     uint32_t arg[5];
     int num = tf->tf_regs.reg_eax;
     if (num >= 0 && num < NUM_SYSCALLS) {

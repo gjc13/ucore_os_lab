@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <unistd.h>
+#include <kdebug.h>
 
 /* ------------- process/thread mechanism design&implementation -------------
 (an simplified Linux process/thread mechanism )
@@ -493,6 +494,7 @@ do_exit(int error_code) {
         }
     }
     local_intr_restore(intr_flag);
+    cprintf("exit called from %s return %d\n", current->name, error_code);
     
     schedule();
     panic("do_exit will not return!! %d.\n", current->pid);
