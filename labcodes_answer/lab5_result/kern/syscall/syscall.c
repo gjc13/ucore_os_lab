@@ -86,7 +86,9 @@ syscall(void) {
     if (eip < 0xc0000000) {
         cprintf("syscall from user\n");
         cprintf("eip 0x%08x\n", tf->tf_eip);
+        cprintf("-------------------------------------------------\n");
         print_user_stackframe(tf->tf_regs.reg_ebp, eip);
+        cprintf("-------------------------------------------------\n");
         print_stackframe();
         panic("done");
     }
