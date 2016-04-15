@@ -3,6 +3,7 @@
 #include <proc.h>
 #include <sched.h>
 #include <assert.h>
+#include <stdio.h>
 
 void
 wakeup_proc(struct proc_struct *proc) {

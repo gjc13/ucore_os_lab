@@ -132,7 +132,7 @@ alloc_proc(void) {
          *       uint32_t wait_state;                        // waiting state
          *       struct proc_struct *cptr, *yptr, *optr;     // relations between processes
          */
-
+        proc->state = PROC_UNINIT;
         proc->wait_state = 0;
         proc->cptr = NULL;
         proc->yptr = NULL;
