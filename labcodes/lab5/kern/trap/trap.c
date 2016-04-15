@@ -53,11 +53,6 @@ idt_init(void) {
       *     You don't know the meaning of this instruction? just google it! and check the libs/x86.h to know more.
       *     Notice: the argument of lidt is idt_pd. try to find it!
       */
-     /* LAB5 YOUR CODE */ 
-     //you should update your lab1 code (just add ONE or TWO lines of code), let user app to use syscall to get the service of ucore
-     //so you should setup the syscall interrupt gate in here
-    //the global descriptor table is loaded at bootasm.s
-    //code seg is at 0x08
     extern uintptr_t __vectors[];
     int i;
     for(i = 0; i < 256; i++) {
@@ -65,6 +60,8 @@ idt_init(void) {
     }
     SETGATE(idt[T_SWITCH_TOU], 0, 0x08, __vectors[T_SWITCH_TOU], 3);
     SETGATE(idt[T_SWITCH_TOK], 0, 0x08, __vectors[T_SWITCH_TOK], 3);
+    /* LAB5 2013011509*/ 
+    SETGATE(idt[T_SYSCALL], 0, 0x08, __vectors[T_SYSCALL], 3);
     lidt(&idt_pd);
 }
 
@@ -225,8 +222,10 @@ trap_dispatch(struct trapframe *tf) {
             assert(swap_tick_event(check_mm_struct) == 0);
         }
         ticks++;
-        if(ticks % 100 == 0) {
+        if(ticks % TICK_NUM == 0) {
             print_ticks();
+            /* LAB5 2013011509*/
+            current->need_resched = 1;
         }
 #if 0
     LAB3 : If some page replacement algorithm(such as CLOCK PRA) need tick to change the priority of pages,
@@ -238,7 +237,6 @@ trap_dispatch(struct trapframe *tf) {
          * (2) Every TICK_NUM cycle, you can print some info using a funciton, such as print_ticks().
          * (3) Too Simple? Yes, I think so!
          */
-        /* LAB5 YOUR CODE */
         /* you should upate you lab1 code (just add ONE or TWO lines of code):
          *    Every TICK_NUM cycle, you should set current process's current->need_resched = 1
          */
