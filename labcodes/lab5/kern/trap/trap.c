@@ -226,6 +226,7 @@ trap_dispatch(struct trapframe *tf) {
             print_ticks();
             /* LAB5 2013011509*/
             current->need_resched = 1;
+            //cprintf("[IRQ_TIMER] will schedule\n");
         }
 #if 0
     LAB3 : If some page replacement algorithm(such as CLOCK PRA) need tick to change the priority of pages,
@@ -298,6 +299,7 @@ trap(struct trapframe *tf) {
                 do_exit(-E_KILLED);
             }
             if (current->need_resched) {
+                //cprintf("[trap] schedule in trap\n");
                 schedule();
             }
         }

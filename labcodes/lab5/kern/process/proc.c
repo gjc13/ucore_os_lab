@@ -702,6 +702,7 @@ execve_exit:
 // do_yield - ask the scheduler to reschedule
 int
 do_yield(void) {
+    //cprintf("[Yield] process %d yielded\n", current->pid);
     current->need_resched = 1;
     return 0;
 }

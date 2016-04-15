@@ -29,12 +29,14 @@ schedule(void) {
     struct proc_struct *next = NULL;
     local_intr_save(intr_flag);
     {
+        //cprintf("[schedule] current %d\n", current->pid);
         current->need_resched = 0;
         last = (current == idleproc) ? &proc_list : &(current->list_link);
         le = last;
         do {
             if ((le = list_next(le)) != &proc_list) {
                 next = le2proc(le, list_link);
+                //cprintf("[schedule] checking %d\n", next->pid);
                 if (next->state == PROC_RUNNABLE) {
                     break;
                 }
