@@ -82,11 +82,17 @@ schedule(void) {
     local_intr_save(intr_flag);
     {
         current->need_resched = 0;
+        cprintf("[Schedule]current %d %s\n", current->pid, current->name);
+        if (current->tf != NULL)
+            cprintf("[Schedule]last process at 0x%08x\n", current->tf->tf_eip);
         if (current->state == PROC_RUNNABLE) {
             sched_class_enqueue(current);
         }
         if ((next = sched_class_pick_next()) != NULL) {
             sched_class_dequeue(next);
+            cprintf("[Schedule]next %d %s\n", next->pid, next->name);
+            if (next->tf != NULL)
+                cprintf("[Schedule]next process at 0x%08x\n", next->tf->tf_eip);
         }
         if (next == NULL) {
             next = idleproc;
