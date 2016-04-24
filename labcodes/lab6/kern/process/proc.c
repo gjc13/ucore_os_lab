@@ -141,6 +141,8 @@ alloc_proc(void) {
         //LAB6 2013011509 init run_list
         list_init(&(proc->run_link));
         skew_heap_init(&(proc->lab6_run_pool));
+        proc->lab6_priority = 1;
+        proc->lab6_stride = 0;
     }
     return proc;
 }
@@ -438,7 +440,7 @@ do_fork(uint32_t clone_flags, uintptr_t stack, struct trapframe *tf) {
     proc->pid = get_pid();
     hash_proc(proc);
     set_links(proc);
-    nr_process++;
+    //nr_process++;
     local_intr_restore(intr_flag);
 
     //    6. call wakeup_proc to make the new child process RUNNABLE
@@ -915,6 +917,7 @@ cpu_idle(void) {
 void
 lab6_set_priority(uint32_t priority)
 {
+    cprintf("[Syscall set priority] set %d\n", priority);
     if (priority == 0)
         current->lab6_priority = 1;
     else current->lab6_priority = priority;

@@ -219,11 +219,9 @@ trap_dispatch(struct trapframe *tf) {
             assert(swap_tick_event(check_mm_struct) == 0);
         }
         ticks++;
+        sched_class_proc_tick(current);
         if(ticks % TICK_NUM == 0) {
             print_ticks();
-            /* LAB5 2013011509*/
-            current->need_resched = 1;
-            //cprintf("[IRQ_TIMER] will schedule\n");
         }
 #if 0
     LAB3 : If some page replacement algorithm(such as CLOCK PRA) need tick to change the priority of pages,
