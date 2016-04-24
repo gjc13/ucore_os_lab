@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <unistd.h>
+#include <skew_heap.h>
 
 /* ------------- process/thread mechanism design&implementation -------------
 (an simplified Linux process/thread mechanism )
@@ -137,6 +138,9 @@ alloc_proc(void) {
         proc->cptr = NULL;
         proc->yptr = NULL;
         proc->optr = NULL;
+        //LAB6 2013011509 init run_list
+        list_init(&(proc->run_link));
+        skew_heap_init(&(proc->lab6_run_pool));
     }
     return proc;
 }
