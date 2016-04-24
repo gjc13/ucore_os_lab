@@ -7,14 +7,14 @@
 
 static void
 RR_init(struct run_queue *rq) {
-    cprintf("[RR Schedule]run_queue init done\n");
     list_init(&(rq->run_list));
     rq->proc_num = 0;
+    cprintf("[RR Schedule]run_queue init done\n");
 }
 
 static void
 RR_enqueue(struct run_queue *rq, struct proc_struct *proc) {
-    cprintf("[RR Schedule]enqueue pid %d name %s\n", proc->pid, proc->name);
+    //cprintf("[RR Schedule]enqueue pid %d name %s\n", proc->pid, proc->name);
     assert(list_empty(&(proc->run_link)));
     list_add_before(&(rq->run_list), &(proc->run_link));
     if (proc->time_slice == 0 || proc->time_slice > rq->max_time_slice) {
@@ -50,12 +50,12 @@ RR_proc_tick(struct run_queue *rq, struct proc_struct *proc) {
     }
 }
 
-struct sched_class default_sched_class = {
-    .name = "RR_scheduler",
-    .init = RR_init,
-    .enqueue = RR_enqueue,
-    .dequeue = RR_dequeue,
-    .pick_next = RR_pick_next,
-    .proc_tick = RR_proc_tick,
-};
+//struct sched_class default_sched_class = {
+//    .name = "RR_scheduler",
+//    .init = RR_init,
+//    .enqueue = RR_enqueue,
+//    .dequeue = RR_dequeue,
+//    .pick_next = RR_pick_next,
+//    .proc_tick = RR_proc_tick,
+//};
 

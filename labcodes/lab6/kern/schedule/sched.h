@@ -41,7 +41,7 @@ struct run_queue {
     unsigned int proc_num;
     int max_time_slice;
     // For LAB6 ONLY
-    skew_heap_entry_t *lab6_run_pool;
+    skew_heap_entry_t * lab6_run_pool;
 };
 
 void sched_init(void);
