@@ -153,11 +153,11 @@ static void stride_proc_tick(struct run_queue *rq, struct proc_struct *proc) {
     }
 }
 
-//struct sched_class default_sched_class = {
-//    .name = "stride_scheduler",
-//    .init = stride_init,
-//    .enqueue = stride_enqueue,
-//    .dequeue = stride_dequeue,
-//    .pick_next = stride_pick_next,
-//    .proc_tick = stride_proc_tick,
-//};
+struct sched_class default_sched_class = {
+    .name = "stride_scheduler",
+    .init = stride_init,
+    .enqueue = stride_enqueue,
+    .dequeue = stride_dequeue,
+    .pick_next = stride_pick_next,
+    .proc_tick = stride_proc_tick,
+};
