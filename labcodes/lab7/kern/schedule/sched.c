@@ -62,6 +62,7 @@ wakeup_proc(struct proc_struct *proc) {
     local_intr_save(intr_flag);
     {
         if (proc->state != PROC_RUNNABLE) {
+            cprintf("Proc %d is now runnable\n", proc->pid);
             proc->state = PROC_RUNNABLE;
             proc->wait_state = 0;
             if (proc != current) {

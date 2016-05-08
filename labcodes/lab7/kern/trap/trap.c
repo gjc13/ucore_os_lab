@@ -219,10 +219,7 @@ trap_dispatch(struct trapframe *tf) {
             assert(swap_tick_event(check_mm_struct) == 0);
         }
         ticks++;
-        sched_class_proc_tick(current);
-        if(ticks % TICK_NUM == 0) {
-            print_ticks();
-        }
+        run_timer_list();
 #if 0
     LAB3 : If some page replacement algorithm(such as CLOCK PRA) need tick to change the priority of pages,
     then you can add code here. 
