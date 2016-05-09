@@ -27,7 +27,6 @@ void cond_signal(condvar_t *cvp) {
         "cond_signal begin: cvp %x, cvp->count %d, cvp->owner->next_count %d\n",
         cvp, cvp->count, cvp->owner->next_count);
     if (cvp->count > 0) {
-        cprintf("Will send signal\n");
         // Put self to waiting
         cvp->owner->next_count++;
         up(&(cvp->sem));

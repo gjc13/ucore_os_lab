@@ -84,7 +84,6 @@ wakeup_wait(wait_queue_t *queue, wait_t *wait, uint32_t wakeup_flags, bool del) 
         wait_queue_del(queue, wait);
     }
     wait->wakeup_flags = wakeup_flags;
-    cprintf("Waking up %d:%s\n", wait->proc->pid, wait->proc->name);
     wakeup_proc(wait->proc);
 }
 
