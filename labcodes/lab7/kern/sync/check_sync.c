@@ -125,14 +125,11 @@ void phi_take_forks_condvar(int i) {
     // try to get fork
     state_condvar[i] = HUNGRY;
     phi_test_condvar(i);
-    if (state_condvar[i] != EATING) {
+    while (state_condvar[i] != EATING) {
         cond_wait(&mtp->cv[i]);
     }
     //--------leave routine in monitor--------------
-    if (mtp->next_count > 0)
-        up(&(mtp->next));
-    else
-        up(&(mtp->mutex));
+    up(&(mtp->mutex));
 }
 
 void phi_put_forks_condvar(int i) {
@@ -146,10 +143,7 @@ void phi_put_forks_condvar(int i) {
     phi_test_condvar(LEFT);
     phi_test_condvar(RIGHT);
     //--------leave routine in monitor--------------
-    if (mtp->next_count > 0)
-        up(&(mtp->next));
-    else
-        up(&(mtp->mutex));
+    up(&(mtp->mutex));
 }
 
 //---------- philosophers using monitor (condition variable)

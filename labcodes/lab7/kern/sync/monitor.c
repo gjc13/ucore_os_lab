@@ -27,12 +27,8 @@ void cond_signal(condvar_t *cvp) {
         "cond_signal begin: cvp %x, cvp->count %d, cvp->owner->next_count %d\n",
         cvp, cvp->count, cvp->owner->next_count);
     if (cvp->count > 0) {
-        // Put self to waiting
-        cvp->owner->next_count++;
+        //Simply give signal without doing anything else (Hasen Style)
         up(&(cvp->sem));
-        //We try to give up control (Hoare style)
-        down(&(cvp->owner->next));
-        cvp->owner->next_count--;
     }
     cprintf(
         "cond_signal end: cvp %x, cvp->count %d, cvp->owner->next_count %d\n",
@@ -49,14 +45,9 @@ void cond_wait(condvar_t *cvp) {
         "cond_wait begin:  cvp %x, cvp->count %d, cvp->owner->next_count %d\n",
         cvp, cvp->count, cvp->owner->next_count);
     cvp->count++;
-    // Run the waiting signaling queue
-    if (cvp->owner->next_count > 0) {
-        up(&(cvp->owner->next));
-    } else {
-        // Give up the lock to let other signal thread in
-        up(&(cvp->owner->mutex));
-    }
+    up(&(cvp->owner->mutex));
     down(&(cvp->sem));
+    down(&(cvp->owner->mutex));
     cvp->count--;
     cprintf(
         "cond_wait end:  cvp %x, cvp->count %d, cvp->owner->next_count %d\n",
