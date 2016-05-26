@@ -19,8 +19,9 @@
 
 #define TICK_NUM 100
 
-static void print_ticks() {
-    cprintf("%d ticks\n",TICK_NUM);
+
+void print_ticks() {
+    cprintf("%d ticks\n",ticks);
 #ifdef DEBUG_GRADE
     cprintf("End of Test.\n");
     panic("EOT: kernel seems ok.");

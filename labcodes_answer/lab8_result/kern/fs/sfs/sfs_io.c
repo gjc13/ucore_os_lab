@@ -5,6 +5,7 @@
 #include <iobuf.h>
 #include <bitmap.h>
 #include <assert.h>
+#include <kdebug.h>
 
 //Basic block-level I/O routines
 
@@ -45,6 +46,8 @@ sfs_rwblock(struct sfs_fs *sfs, void *buf, uint32_t blkno, uint32_t nblks, bool 
         }
     }
     unlock_sfs_io(sfs);
+    print_stackframe();
+    assert(0);
     return ret;
 }
 

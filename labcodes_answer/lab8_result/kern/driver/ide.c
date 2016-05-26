@@ -66,12 +66,17 @@ static struct ide_device {
 
 static int
 ide_wait_ready(unsigned short iobase, bool check_error) {
+    extern void print_ticks();
     int r;
+    cprintf("pooling ide\n");
+    print_ticks();
     while ((r = inb(iobase + ISA_STATUS)) & IDE_BSY)
         /* nothing */;
     if (check_error && (r & (IDE_DF | IDE_ERR)) != 0) {
         return -1;
     }
+    print_ticks();
+    cprintf("done\n");
     return 0;
 }
 

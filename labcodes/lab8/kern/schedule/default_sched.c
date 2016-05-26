@@ -3,6 +3,7 @@
 #include <proc.h>
 #include <assert.h>
 #include <default_sched.h>
+#include <stdio.h>
 
 static void
 RR_init(struct run_queue *rq) {
@@ -31,6 +32,7 @@ RR_dequeue(struct run_queue *rq, struct proc_struct *proc) {
 static struct proc_struct *
 RR_pick_next(struct run_queue *rq) {
     list_entry_t *le = list_next(&(rq->run_list));
+    le = list_next(&(rq->run_list));
     if (le != &(rq->run_list)) {
         return le2proc(le, run_link);
     }
@@ -47,12 +49,12 @@ RR_proc_tick(struct run_queue *rq, struct proc_struct *proc) {
     }
 }
 
-struct sched_class default_sched_class = {
-    .name = "RR_scheduler",
-    .init = RR_init,
-    .enqueue = RR_enqueue,
-    .dequeue = RR_dequeue,
-    .pick_next = RR_pick_next,
-    .proc_tick = RR_proc_tick,
-};
+//struct sched_class default_sched_class = {
+//    .name = "RR_scheduler",
+//    .init = RR_init,
+//    .enqueue = RR_enqueue,
+//    .dequeue = RR_dequeue,
+//    .pick_next = RR_pick_next,
+//    .proc_tick = RR_proc_tick,
+//};
 
